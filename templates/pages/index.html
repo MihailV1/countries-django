@@ -8,22 +8,34 @@
                 <hr>
             </div>
         </div>
+       <div class="container mt-5 text-center">
+            <h1>Welcome!</h1>
+            <p class="lead mt-4">
+                Here you will find information about countries and languages spoken around the world.<br>
+                Explore the world with our database!
+            </p>
 
-        <div class="row">
-            <div class="col">
-                <p>Добро пожаловать, уважаемый пользователь!
-                <hr>
+            <hr class="my-4">
+
+            <div class="row justify-content-center mt-4">
+                <div class="col-md-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Number of countries 🌍</h5>
+                            <p class="card-text display-6">{{ total_countries }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mt-3 mt-md-0">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Languages in the database 🗣️</h5>
+                            <p class="card-text display-6">{{ total_languages }}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <div class="row mt-3">
-            <div class="col-4 offset-4">
-                TEST
-            </div>
-        </div>
-
-        <div class="row mt-3">
-            TEST2
-        </div>
+       </div>
     </div>
 {% endblock %}
