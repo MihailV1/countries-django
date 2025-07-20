@@ -21,6 +21,6 @@ from countries import views
 urlpatterns = [
     # path('admin/', admin.site.urls),
     path('', views.index_page, name='home'),
-    path('countries-list/', views.countries_list, name='countries_list'),
-    path('country/', views.country, name='country'),
+    path('countries-list/', views.countries_list_view, name='countries_list'),
+    path('country/<str:country_name>', views.country_detail, name='country_detail'),
 ]

@@ -16,7 +16,9 @@
                         <div class="text-start w-100" style="max-width: 300px;">
                             <ol class="mt-4" start="{{ page_obj.start_index }}">
                                 {% for country in page_obj %}
+                                    <a href="{% url 'country_detail' country_name=country.country|urlencode %}">
                                     <li>{{ country.country }}</li>
+                                    </a>
                                 {% empty %}
                                     <div class="alert alert-warning">
                                         Нет данных о странах.
@@ -32,13 +34,13 @@
                                 <!-- Кнопка Назад -->
                                 {% if page_obj.has_previous %}
                                     <li class="page-item">
-                                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Предыдущая">
-                                            &laquo; Назад
+                                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                                            &laquo; backward
                                         </a>
                                     </li>
                                 {% else %}
                                     <li class="page-item disabled">
-                                        <span class="page-link">&laquo; Назад</span>
+                                        <span class="page-link">&laquo; backward</span>
                                     </li>
                                 {% endif %}
 
@@ -64,13 +66,13 @@
                                 <!-- Кнопка Вперёд -->
                                 {% if page_obj.has_next %}
                                     <li class="page-item">
-                                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Следующая">
-                                            Вперёд &raquo;
+                                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                                            forward &raquo;
                                         </a>
                                     </li>
                                 {% else %}
                                     <li class="page-item disabled">
-                                        <span class="page-link">Вперёд &raquo;</span>
+                                        <span class="page-link">Forward &raquo;</span>
                                     </li>
                                 {% endif %}
 
