@@ -19,6 +19,7 @@ from django.urls import path
 from countries import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    # path('admin/', admin.site.urls),
     path('', views.index_page, name='home'),
+    path('countries-list/', views.countries_list, name='countries_list'),
 ]
