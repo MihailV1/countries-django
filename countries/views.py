@@ -22,3 +22,10 @@ def countries_list(request):
                # 'countries_data': countries_data
                 }
     return render(request,'pages/countries_list.html', context)
+
+def country(request):
+    countries_data = process_json_data(Path() / "country-by-languages.json")
+    context = {'pagename': 'Список стран',
+               # 'countries_data': countries_data
+               }
+    return render(request, 'pages/country.html', context)

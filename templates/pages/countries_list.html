@@ -17,6 +17,10 @@
                             <ol class="mt-4" start="{{ page_obj.start_index }}">
                                 {% for country in page_obj %}
                                     <li>{{ country.country }}</li>
+                                {% empty %}
+                                    <div class="alert alert-warning">
+                                        Нет данных о странах.
+                                    </div>
                                 {% endfor %}
                             </ol>
                         </div>
