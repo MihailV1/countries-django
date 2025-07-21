@@ -9,7 +9,20 @@ JSON_FILE_PATH = Path() / "country-by-languages.json"
 # Create your views here.
 
 def index_page(request):
-    context = {'pagename': 'Country by languages'}
+    countries_data = process_json_data(JSON_FILE_PATH)
+    total_countries = len(countries_data)
+    # Собираем все языки в один список
+    all_languages = []
+    for country in countries_data:
+        all_languages.extend(country["languages"])
+
+    # Убираем дубликаты с помощью set, затем сортируем
+    unique_languages = sorted(set(all_languages))
+    total_languages = len(unique_languages)
+
+    context = {'pagename': 'Country by languages',
+               'total_countries': total_countries,
+               'total_languages': total_languages}
     return render(request, 'pages/index.html', context)
 
 def countries_list_view(request):
