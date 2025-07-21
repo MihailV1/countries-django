@@ -51,6 +51,7 @@ install requirements:
 `pip install -r requirements.txt`
 
 run project:
+source countries_venv/Scripts/activate
 python manage.py runserver
 
 run django-extensions console: 
