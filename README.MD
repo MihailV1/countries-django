@@ -20,8 +20,8 @@
 - [x] Отправьте ссылку на ваш репозиторий преподавателю на почту: _________@gmail.com :-)
 
 ### Часть-3
-- [ ] Создайте модель-класс Country.
-- [ ] Перенесите все страны из исходного json файла в базу данных(БД).
+- [x] Создайте модель-класс Country.
+- [x] Перенесите все страны из исходного json файла в базу данных(БД).
 - [ ] Измените работу вашего приложения на работу с БД
 - [ ] Выгрузите данные из БД в фикстуру(fixture) countries.json
 
@@ -54,6 +54,12 @@ run project:
 source countries_venv/Scripts/activate
 python manage.py runserver
 
+python manage.py makemigrations countries
+python manage.py migrate
+
+
+pip install django-extensions
+pip install ipython
 run django-extensions console: 
 `python manage.py shell_plus --ipython`
 

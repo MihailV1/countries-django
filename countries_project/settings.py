@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'countries',
+    'django_extensions'
 ]
 
 MIDDLEWARE = [
@@ -126,26 +127,54 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
+'version': 1,
+'disable_existing_loggers': False, # Не отключаем существующие логгеры
+
+'formatters': {
+    'sql_formatter': {
+        'format': '{levelname} {message} (Duration: {duration:.3f}s)', # Формат для SQL
+        'style': '{',
     },
-    'root': {
-        'handlers': ['console'],
-        'level': 'WARNING',
+},
+
+'handlers': {
+    'console_sql': { # Отдельный обработчик для SQL-запросов
+        'class': 'logging.StreamHandler',
+        'formatter': 'sql_formatter',
+        'level': 'DEBUG',
     },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-        '__main__': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-        },
+},
+
+'loggers': {
+    'django.db.backends': {
+        'handlers': ['console_sql'], # Используем наш специальный обработчик
+        'level': 'DEBUG',           # Уровень DEBUG для отображения всех запросов
+        'propagate': False,         # Очень важно: отключаем всплытие, чтобы SQL не дублировался другими логгерами
     },
 }
+}
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False, # Не отключаем существующие логгеры
+#     'handlers': {
+#         'console': {
+#             'class': 'logging.StreamHandler',
+#         },
+#     },
+#     'root': {
+#         'handlers': ['console'],
+#         'level': 'WARNING',
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['console'],
+#             'level': 'ERROR',
+#             'propagate': True,
+#         },
+#         '__main__': {
+#             'handlers': ['console'],
+#             'level': 'DEBUG',
+#         },
+#     },
+# }
