@@ -23,7 +23,7 @@
 - [x] Создайте модель-класс Country.
 - [x] Перенесите все страны из исходного json файла в базу данных(БД).
 - [X] Измените работу вашего приложения на работу с БД
-- [ ] Выгрузите данные из БД в фикстуру(fixture) countries.json
+- [X] Выгрузите данные из БД в фикстуру(fixture) countries.json
 
 ### Часть-4
 - [ ] Используя информацию с занятия, измените структуру БД, реализовав связь “многие-ко-многом” для стран и языков.
@@ -70,7 +70,11 @@ pip install ipython
 ### run django-extensions console:
 python manage.py shell_plus --ipython
     
-### fixtures
-python manage.py dumpdata <app_name>[.<model_name>] --indent 2 > <file>.json
+### fixtures создания 
+python manage.py dumpdata countries.Country --indent 2 > countries/fixtures/countries.json
+### fixtures Загрузка
+python manage.py loaddata countries/fixtures/countries.json
+### Удаление данных из всех таблиц приложения:
+python manage.py flush
 
 
