@@ -22,16 +22,21 @@
 ### Часть-3
 - [x] Создайте модель-класс Country.
 - [x] Перенесите все страны из исходного json файла в базу данных(БД).
-- [ ] Измените работу вашего приложения на работу с БД
+- [X] Измените работу вашего приложения на работу с БД
 - [ ] Выгрузите данные из БД в фикстуру(fixture) countries.json
 
+### Часть-4
+- [ ] Используя информацию с занятия, измените структуру БД, реализовав связь “многие-ко-многом” для стран и языков.
+        Не забудьте: выгрузить обновленные данные из БД fixture: countries.json
+- [x] Добавьте в проект файл README.md, добавив в него:
+          Информацию о запуске проекта после клонирования
+          Список всех заданий, пометив выполненные
 
 
 
 
 
-
-новое окружение:
+### новое окружение:
 python3 -m venv countries_venv
 source countries_venv/Scripts/activate
 
@@ -47,20 +52,25 @@ python manage.py startapp countries
 
 
 
-install requirements: 
-`pip install -r requirements.txt`
+### install requirements: 
+pip install -r requirements.txt
 
-run project:
+### run project:
 source countries_venv/Scripts/activate
 python manage.py runserver
 
+### models
 python manage.py makemigrations countries
 python manage.py migrate
 
 
 pip install django-extensions
 pip install ipython
-run django-extensions console: 
-`python manage.py shell_plus --ipython`
+
+### run django-extensions console:
+python manage.py shell_plus --ipython
+    
+### fixtures
+python manage.py dumpdata <app_name>[.<model_name>] --indent 2 > <file>.json
 
 

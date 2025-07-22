@@ -20,6 +20,10 @@
                         <ul class="mt-4" >
                         {% for language in languages %}
                             <li>{{ language }}</li>
+                        {% empty %}
+                            <div class="alert alert-warning">
+                                No languages data available.
+                            </div>
                         {% endfor %}
                         </ul>
                         <button class="btn btn-secondary mb-3" onclick="goBack()">
