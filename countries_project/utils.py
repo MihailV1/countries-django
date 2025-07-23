@@ -1,7 +1,8 @@
 import json
 import logging
 from pathlib import Path
-from countries.models import Country
+from countries.models import Country, Language
+from django.core.management import call_command
 
 
 
@@ -30,14 +31,30 @@ def load_data_to_db():
 
     for entry in countries_data:
         country_name = entry['country']
-        # language_names = entry['languages']
+        language_names = entry['languages']
 
         # Создаём или получаем страну
-        Country.objects.get_or_create(name=country_name)
+        # country = Country.objects.get_or_create(name=country_name)[0]
+        # country, created = Country.objects.get_or_create(name=country_name)
+        # if created:
+        #     print(f"Добавлена новая страна: {country.name}")
+        country, _ = Country.objects.get_or_create(name=country_name)
 
-        # for lang_name in language_names:
-        #     language, _ = Language.objects.get_or_create(name=lang_name)
-        #     country.languages.add(language)
+        for lang_name in language_names:
+            language, _ = Language.objects.get_or_create(name=lang_name)
+            country.languages.add(language)
 
     print("Данные успешно импортированы в базу.")
 
+def dump_fixture():
+    fixtures_path = Path("countries/fixtures")
+    fixtures_path.mkdir(parents=True, exist_ok=True)  # Создаёт директорию, если её нет
+
+    try:
+        with open(fixtures_path / "countries_all.json", "w", encoding="utf-8") as f:
+            call_command("dumpdata", "countries", indent=2, stdout=f)
+        print("✅ Фикстура успешно сохранена в 'countries/fixtures/countries_all.json'")
+        return True
+    except Exception as e:
+        print(f"❌ Ошибка при создании фикстуры: {e}")
+        return False
