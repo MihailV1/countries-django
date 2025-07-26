@@ -2,32 +2,27 @@
 {% block content %}
     <!-- Begin page content -->
     <div class="container">
-{#        <div class="row">#}
-{#            <div class="col text-center">#}
-{#                <h1>{{ pagename }}</h1>#}
-{#                <hr>#}
-{#            </div>#}
-{#        </div>#}
         <div class="row">
             <div class="col text-center mt-4 mb-0">
-                <h1 class="display-6 text-dark">Languages of <span class="text-secondary">{{ pagename }}</span></h1>
+                <h1 class="display-6 text-dark"><span class="text-secondary">{{ pagename }}</span> language in countries</h1>
                 <hr class="w-50 mx-auto">
             </div>
         </div>
+
         <div class="row">
             <div class="d-flex justify-content-center">
                 <div class="text-start w-100" style="max-width: 300px;">
-                    {% if country_info.error %}
-                            <a class="nav-link" href="{% url 'countries_list' %}">
-                                <div class="alert alert-warning">{{ country_info.error }}</div>
+                    {% if language_info.error %}
+                            <a class="nav-link" href="{% url 'languages_list' %}">
+                                <div class="alert alert-warning">{{ language_info.error }}</div>
                             </a>
                     {% else %}
                         <ul class="mt-4" >
-                        {% for language in languages %}
-                            <li>{{ language }}</li>
+                        {% for countries in language_in_countries %}
+                            <li>{{ countries }}</li>
                         {% empty %}
                             <div class="alert alert-warning">
-                                No languages data available.
+                                No countries data available.
                             </div>
                         {% endfor %}
                         </ul>
@@ -45,7 +40,7 @@
             if (document.referrer) {
                 history.back();
             } else {
-                window.location.href = "/countries-list/";
+                window.location.href = "/languages_list/";
             }
         }
     </script>

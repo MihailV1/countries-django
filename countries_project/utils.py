@@ -1,6 +1,7 @@
 import json
 import logging
 from pathlib import Path
+from django.db.models import Model, QuerySet
 from countries.models import Country, Language
 from django.core.management import call_command
 
@@ -45,6 +46,12 @@ def load_data_to_db():
             country.languages.add(language)
 
     print("Данные успешно импортированы в базу.")
+
+
+def get_alphabetical_list(queryset: QuerySet[Model]) -> list[str]:
+    first_letters = sorted(set(item.name[0].upper() for item in queryset if item.name))
+    return first_letters
+
 
 def dump_fixture():
     fixtures_path = Path("countries/fixtures")

@@ -1,6 +1,8 @@
+from tkinter.font import names
+
 from django.http import HttpResponseNotFound
 from django.shortcuts import render
-from countries_project.utils import process_json_data
+from countries_project.utils import process_json_data, get_alphabetical_list
 from pathlib import Path
 from countries.models import Country, Language
 from django.core.paginator import Paginator
@@ -40,15 +42,25 @@ def countries_list_view(request):
     # json
     # countries_data = process_json_data(JSON_FILE_PATH)
     # sqlite
-    countries_data = Country.objects.all()
+    countries_data = Country.objects.all().order_by('name')
     # print(f"\n\n\n{countries_data}\n\n\n")
+    alphabetical_list = get_alphabetical_list(countries_data)
 
+    letter = request.GET.get("letter")
+    if letter is not None:
+        countries_data = Country.objects.filter(name__istartswith=letter).order_by("name")
+        # print(f"\n\n\n\nLetter: {letter}\n\n\n\n")
+        pagename = f'All countries starting with "{letter.upper()}"'
+    else:
+        pagename = "List of all countries"
     # paginator
-    paginator = Paginator(countries_data, 20)  # Показывать по 10 сниппетов на странице
+    # print(f"\n\n\n\ncountries_data: {countries_data}\n\n\n\n")
+    paginator = Paginator(countries_data, 10)  # Показывать по 10 сниппетов на странице
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)  # Получаем объект Page для запрошенной страницы
 
-    context = {'pagename': 'List of Countries',
+    context = {'pagename': pagename,
+               'alphabetical_list': alphabetical_list,
                'page_obj': page_obj,
                 }
     return render(request,'pages/countries_list.html', context)
@@ -87,23 +99,51 @@ def languages_list_view(request):
     # json
     countries_data = process_json_data(JSON_FILE_PATH)
     # sqlite
-    languages_data = Language.objects.all()
-
+    languages_data = Language.objects.all().order_by('name')
+    alphabetical_list = get_alphabetical_list(languages_data)
     # json
     # Собираем все языки в один список
     # all_languages = []
     # for country in countries_data:
     #     all_languages.extend(country["languages"])
-    # Убираем дубликаты с помощью set, затем сортируем
+    # Убир\аем дубликаты с помощью set, затем сортируем
     # unique_languages = sorted(set(all_languages))
+    letter = request.GET.get("letter")
+    if letter is not None:
+        languages_data = Language.objects.filter(name__istartswith=letter).order_by("name")
+        # print(f"\n\n\n\nLetter: {letter}\n\n\n\n")
+        pagename = f'All languages starting with "{letter.upper()}"'
+    else:
+        pagename = "List of all languages"
 
     # paginator
-    paginator = Paginator(languages_data, 20)  # Показывать по 10 сниппетов на странице
+    paginator = Paginator(languages_data, 10)  # Показывать по 10 сниппетов на странице
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)  # Получаем объект Page для запрошенной страницы
     # print(f"\nItems on page {page_number}: {list(page_obj)}\n")
     context = {
-        'pagename': 'List of Languages',
+        'pagename': pagename,
+        'alphabetical_list': alphabetical_list,
         'page_obj': page_obj,
     }
     return render(request, 'pages/languages_list.html', context)
+
+def language_detail(request, language_name):
+
+    language_name = unquote(language_name) #  раскодирует все символы, закодированные в URL-формате.
+    language_in_countries = Country.objects.filter(languages__name=language_name)
+    language_info = {}
+    if language_in_countries is None:
+        language_info = {
+            "language": language_name,
+            # "languages": [],
+            "error": "Дітько! Страны не найдены"
+        }
+        language_in_countries = []
+
+    context = {
+        'pagename': language_name,
+        'language_in_countries': language_in_countries,
+        'language_info': language_info,
+    }
+    return render(request, 'pages/language.html', context)
