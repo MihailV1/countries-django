@@ -4,6 +4,7 @@ from django.http import HttpResponseNotFound
 from django.shortcuts import render
 from countries_project.utils import process_json_data, get_alphabetical_list
 from pathlib import Path
+from django.db.models import Count
 from countries.models import Country, Language
 from django.core.paginator import Paginator
 from urllib.parse import unquote #  раскодирует все символы, закодированные в URL-формате.
@@ -23,6 +24,8 @@ def index_page(request):
     languages_data = Language.objects.all()
     total_languages = languages_data.count()
 
+    top_languages = Language.objects.annotate(country_count=Count("country")).order_by("-country_count")[:5]
+    top_countries = Country.objects.annotate(language_count=Count("languages")).order_by("-language_count")[:5]
     # Собираем все языки в один список
     # all_languages = []
     # for country in countries_data:
@@ -34,7 +37,9 @@ def index_page(request):
 
     context = {'pagename': 'Country by languages',
                'total_countries': total_countries,
-               'total_languages': total_languages
+               'total_languages': total_languages,
+               "top_languages": top_languages,
+               "top_countries": top_countries,
                 }
     return render(request, 'pages/index.html', context)
 
@@ -49,7 +54,6 @@ def countries_list_view(request):
     letter = request.GET.get("letter")
     if letter is not None:
         countries_data = Country.objects.filter(name__istartswith=letter).order_by("name")
-        # print(f"\n\n\n\nLetter: {letter}\n\n\n\n")
         pagename = f'All countries starting with "{letter.upper()}"'
     else:
         pagename = "List of all countries"
@@ -80,13 +84,17 @@ def country_detail(request, country_name):
 
     if country_info is None:
         country_info = {
-            "country": country_name,
+            # "country": country_name,
             # "languages": [],
             "error": "Дітько! Страна не найдена"
         }
         country_languages = []
     else:
         country_languages = country_info.languages.all()
+        country_info = {
+            "count": len(country_languages)
+        }
+
 
     context = {
         'pagename': country_name,
@@ -129,18 +137,19 @@ def languages_list_view(request):
     return render(request, 'pages/languages_list.html', context)
 
 def language_detail(request, language_name):
-
     language_name = unquote(language_name) #  раскодирует все символы, закодированные в URL-формате.
     language_in_countries = Country.objects.filter(languages__name=language_name)
     language_info = {}
-    if language_in_countries is None:
+
+    if not language_in_countries:
         language_info = {
-            "language": language_name,
-            # "languages": [],
-            "error": "Дітько! Страны не найдены"
+            "error": "Дітько! Язык не найден"
         }
         language_in_countries = []
-
+    else:
+        language_info = {
+            "count": len(language_in_countries)
+        }
     context = {
         'pagename': language_name,
         'language_in_countries': language_in_countries,

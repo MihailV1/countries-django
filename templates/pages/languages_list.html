@@ -12,7 +12,7 @@
             <h5>Alphabetical list of languages</h5>
             {% for letter in alphabetical_list %}
                 {#                <a href=" ?letter={{ letter }}">{{ letter }}</a> #}
-                <a href="{% querystring letter=letter %}">{{ letter }}</a>
+                <a href="{% querystring letter=letter page=None %}">{{ letter }}</a>
             {% empty %}
                 <div class="alert alert-warning">
                     No language data available.
